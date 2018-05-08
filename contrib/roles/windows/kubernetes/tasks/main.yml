@@ -57,4 +57,4 @@
   when: ansible_kernel == "10.0.16299.0"
 
 - include_tasks: ./create_infracontainer.yml
-  when: infra_inspect.rc != 0 and ansible_kernel == "10.0.16299.0"
+  when: ansible_kernel == "10.0.16299.0" and infra_inspect.rc != 0

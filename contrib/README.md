@@ -17,15 +17,15 @@ Currently supported Linux nodes:
 - Ubuntu 14.04 and 16.04
 
 Currently supported Windows nodes:
-- Windows Server 2016 build version 1709
+- Windows Server 2016 version 1709 (build version 16299)
+
+- Windows Server 2016 build version 14393
 
 Note: minimum required ansible version is 2.4.2.0
 
 ## Work in progress
 
 - Support for hybrid cluster with master/minion nodes on different cloud providers.
-
-- Windows Server 2016 build number 14393
 
 - Different Linux versions support (currently only Ubuntu 14.04 and 16.04 supported)
 

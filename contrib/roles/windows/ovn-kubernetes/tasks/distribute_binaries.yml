@@ -16,7 +16,37 @@
   with_items:
     - ovnkube.exe
     - kubectl.exe
+
+- name: ovn-kubernetes | get kubernetes binaries windows 2016 v1709
+  win_copy:
+    src: "{{ansible_tmp_dir}}/{{item}}"
+    dest: "{{ download_info.install_path }}/{{item}}"
+  with_items:
     - kubelet.exe
+  when: ansible_kernel == "10.0.16299.0"
+
+# Windows Server 2016 custom kubelet
+- name: ovn-kubernetes | check if kubelet.zip exists
+  win_stat:
+    path: "{{ download_info.install_path }}/kubelet.zip"
+  register: kubeletzip_info
+  when: ansible_kernel == "10.0.14393.0"
+
+# The binary has over 100MB which will trigger Google drive virus scan warning
+# and cannot be skipped. Download the zip file and unzip instead
+- name: ovn-kubernetes | get kubernetes binaries windows 2016
+  win_get_url:
+    url: "{{custom_kubelet_win2016_link}}"
+    dest: "{{ download_info.install_path }}/kubelet.zip"
+    timeout: 60
+  retries: 3
+  when: ansible_kernel == "10.0.14393.0" and not kubeletzip_info.stat.exists
+
+- name: ovn-kubernetes | Unzip kubelet.zip
+  win_unzip:
+    src: "{{ download_info.install_path }}/kubelet.zip"
+    dest: "{{ download_info.install_path }}/"
+  when: ansible_kernel == "10.0.14393.0" and not kubeletzip_info.stat.exists
 
 - name: ovn-kubernetes | get cni binary
   win_copy:

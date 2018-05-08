@@ -74,5 +74,9 @@
         bcdedit_needed: true
     - import_role:
         name: windows/ovn-kubernetes
+      vars:
+        # TODO: Remove this custom build once there is a release that includes the
+        # fix for windows server 2016. (v1.11.0-alpha3 should be that release)
+        custom_kubelet_win2016_link: "https://docs.google.com/uc?export=download&id=1dh0uOSODVavhXpXk_uItCsyp8h4H0uM-"
     - import_role:
         name: windows/kubernetes

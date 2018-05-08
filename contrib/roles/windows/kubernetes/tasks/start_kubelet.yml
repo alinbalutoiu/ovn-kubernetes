@@ -24,10 +24,26 @@
       current-context: kubelet-context
     newline: unix
 
+- set_fact:
+    pod_infra_container_image: "{{kubernetes_info.infracontainername_1709}}"
+  when: ansible_kernel == "10.0.16299.0"
+
+- set_fact:
+    pod_infra_container_image: "apprenda/pause"
+  when: ansible_kernel == "10.0.14393.0"
+
+- name: Setting environment variable for windows 2016
+  win_environment:
+    state: present
+    name: "CONTAINER_NETWORK"
+    value: "{{ docker_info.docker_network_name }}"
+    level: machine
+  when: ansible_kernel == "10.0.14393.0"
+
 - name: Kubelet | Create Kubelet service
   win_service:
     name: kubelet
-    path: '"{{ install_info.install_path }}\\servicewrapper.exe" kubelet "{{ install_info.install_path }}\\kubelet.exe" --hostname-override="{{ ansible_hostname }}" --cluster-dns="{{ kubernetes_info.K8S_DNS_SERVICE_IP }}" --cluster-domain="{{ kubernetes_info.K8S_DNS_DOMAIN }}" --pod-infra-container-image="{{kubernetes_info.infracontainername_1709}}" --resolv-conf="" --kubeconfig="{{ install_info.install_path }}\\kubeconfig.yaml" --network-plugin=cni --cni-bin-dir="{{ install_info.install_path }}\\cni" --cni-conf-dir="{{ install_info.install_path }}\\cni" --log-dir="{{ install_info.install_path }}"'
+    path: '"{{ install_info.install_path }}\\servicewrapper.exe" kubelet "{{ install_info.install_path }}\\kubelet.exe" --hostname-override="{{ ansible_hostname }}" --cluster-dns="{{ kubernetes_info.K8S_DNS_SERVICE_IP }}" --cluster-domain="{{ kubernetes_info.K8S_DNS_DOMAIN }}" --pod-infra-container-image="{{pod_infra_container_image}}" --resolv-conf="" --kubeconfig="{{ install_info.install_path }}\\kubeconfig.yaml" --network-plugin=cni --cni-bin-dir="{{ install_info.install_path }}\\cni" --cni-conf-dir="{{ install_info.install_path }}\\cni" --log-dir="{{ install_info.install_path }}"'
     display_name: Kubernetes Kubelet
     description: Kubernetes Kubelet service
     username: LocalSystem

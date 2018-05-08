@@ -1,7 +1,13 @@
 ---
-- name: Docker network setup | Remove current default nat network
+- name: Docker network setup | Remove current default nat network win2016 v1709
   win_shell: |
     Get-HNSNetwork | Remove-HNSNetwork
+  when: ansible_kernel == "10.0.16299.0"
+
+- name: Docker network setup | Remove current default nat network win2016
+  win_shell: |
+    Get-ContainerNetwork | Remove-ContainerNetwork -Force
+  when: ansible_kernel == "10.0.14393.0"
 
 - name: Docker network setup | Create docker config
   win_lineinfile:

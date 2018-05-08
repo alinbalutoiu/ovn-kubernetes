@@ -326,3 +326,21 @@
           imagePullPolicy: IfNotPresent
         nodeSelector:
           beta.kubernetes.io/os: windows
+- name: Create test yamls
+  lineinfile:
+    path: /root/iis-pod-2016.yaml
+    create: yes
+    line: |
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: iis-2016
+        labels:
+          name: webserver
+      spec:
+        containers:
+        - name: nano
+          image: microsoft/iis
+          imagePullPolicy: IfNotPresent
+        nodeSelector:
+          beta.kubernetes.io/os: windows
