@@ -2,7 +2,6 @@ package cluster
 
 import (
 	"net"
-	"runtime"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -74,9 +73,6 @@ func (cluster *OvnClusterController) StartClusterNode(name string) error {
 	}
 
 	if cluster.GatewayInit {
-		if runtime.GOOS == windowsOS {
-			panic("Windows is not supported as a gateway node")
-		}
 		err = cluster.initGateway(node.Name, cluster.ClusterIPNet.String(),
 			subnet.String())
 		if err != nil {
@@ -126,9 +122,6 @@ func (cluster *OvnClusterController) updateOvnNode(masterIP string,
 
 	// Reinit Gateway for this node if the --init-gateways flag is set
 	if cluster.GatewayInit {
-		if runtime.GOOS == windowsOS {
-			panic("Windows is not supported as a gateway node")
-		}
 		err = cluster.initGateway(node.Name, cluster.ClusterIPNet.String(),
 			subnet)
 		if err != nil {
