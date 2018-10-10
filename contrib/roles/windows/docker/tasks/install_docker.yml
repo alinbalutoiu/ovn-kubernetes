@@ -38,6 +38,3 @@
     state: started
   async: 60
   poll: 5
-
-- name: Docker | Reboot computer to update Path with docker
-  win_reboot:
