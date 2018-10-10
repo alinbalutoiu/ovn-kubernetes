@@ -24,14 +24,20 @@
     elements: "{{ docker_download_info.install_dir }}/docker"
     scope: machine
     state: present
+  async: 60
+  poll: 3
 
 - name: Docker | Register docker Get-Service
   win_shell: dockerd --register-service
+  async: 60
+  poll: 3
 
 - name: Docker | Start docker service
   win_service:
     name: docker
     state: started
+  async: 60
+  poll: 3
 
 - name: Docker | Reboot computer to update Path with docker
   win_reboot:
