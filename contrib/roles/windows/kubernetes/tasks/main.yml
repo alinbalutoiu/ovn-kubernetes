@@ -54,6 +54,10 @@
   include_tasks: ./setup_ovs_docker.yml
   when: transparent_inspect.rc != 0
 
+- name: Kubernetes | refresh network details
+  include_tasks: set_ip_facts.yml
+  when: transparent_inspect.rc != 0
+
 - name: Kubernetes | Check ping to OVN gateway
   win_shell: ping {{OVN_GATEWAY_IP}} -n 1
   register: ping_ovn_gateway

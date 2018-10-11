@@ -21,10 +21,8 @@
       $HNS_NW = Get-HNSNetwork | where {$_.type -eq "transparent"}
       $HNS_ID = $HNS_NW.Id
       Disable-OVSOnHNSNetwork $HNS_ID
-      ovs-vsctl --if-exists --no-wait del-br br-ex
-      ovs-vsctl --no-wait --may-exist add-br br-ex
-      ovs-vsctl --no-wait add-port br-ex "vEthernet ({{interface_name}})" -- set interface  "vEthernet ({{interface_name}})" type=internal
-      ovs-vsctl --no-wait add-port br-ex '{{interface_name}}'
+      ovs-vsctl --no-wait --may-exist add-br "vEthernet ({{interface_name}})"
+      ovs-vsctl --no-wait add-port "vEthernet ({{interface_name}})" '{{interface_name}}'
       Stop-Service ovs-vswitchd
       Enable-OVSOnHNSNetwork $HNS_ID
 
