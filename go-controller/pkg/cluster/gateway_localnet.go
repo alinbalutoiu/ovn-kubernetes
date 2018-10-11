@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/coreos/go-iptables/iptables"
 	"github.com/openvswitch/ovn-kubernetes/go-controller/pkg/util"
 )
 
@@ -84,7 +85,11 @@ func localnetGatewayNAT(ipt util.IPTablesHelper, ifname, ip string) error {
 }
 
 func initLocalnetGateway(nodeName string, clusterIPSubnet []string,
-	subnet string, ipt util.IPTablesHelper) error {
+	subnet string) error {
+	ipt, err := iptables.NewWithProtocol(iptables.ProtocolIPv4)
+	if err != nil {
+		return fmt.Errorf("failed to initialize iptables: %v", err)
+	}
 	// Create a localnet OVS bridge.
 	localnetBridgeName := "br-localnet"
 	_, stderr, err := util.RunOVSVsctl("--may-exist", "add-br",
